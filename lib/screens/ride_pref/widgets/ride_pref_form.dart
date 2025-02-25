@@ -6,6 +6,7 @@ import '../../../model/user/user.dart';
 import '../ride_pref_screen.dart';
 import 'blabutton.dart';
 import 'location_picker_screen.dart';
+import '../../../utils/animations_util.dart'; // Import the AnimationUtils
 
 class RidePrefForm extends StatefulWidget {
   final RidePref initRidePref;
@@ -109,8 +110,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
   void _pickLocation(TextEditingController controller) async {
     final Location? selectedLocation = await Navigator.push<Location>(
       context,
-      MaterialPageRoute(
-        builder: (context) => LocationPickerScreen(locations: _locations),
+      AnimationUtils.createBottomToTopRoute(
+        LocationPickerScreen(locations: _locations),
       ),
     );
 
