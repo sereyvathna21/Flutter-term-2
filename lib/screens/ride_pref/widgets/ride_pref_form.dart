@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../../model/ride/locations.dart';
 import '../../../model/ride/ride.dart';
 import '../../../model/ride_pref/ride_pref.dart';
-import '../../../model/user/user.dart';
-import '../ride_pref_screen.dart';
+import '../../../service/rides_service.dart'; // Import the RidesService
 import 'blabutton.dart';
 import 'location_picker_screen.dart';
+import 'rides_screen.dart'; // Import the RidesScreen
 import '../../../utils/animations_util.dart'; // Import the AnimationUtils
 
 class RidePrefForm extends StatefulWidget {
@@ -71,29 +71,17 @@ class _RidePrefFormState extends State<RidePrefForm> {
 
   void _onSearch() {
     if (_formKey.currentState!.validate()) {
+      // Replace with actual logic to fetch matching rides
+      final matchingRides = RidesService.availableRides.where((ride) {
+        return ride.departureLocation.name == _departureController.text &&
+            ride.arrivalLocation.name == _arrivalController.text &&
+            ride.departureDate.toString() == _dateController.text;
+      }).toList();
+
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => FakeRidesScreen(
-            ride: Ride(
-              departureLocation: Location(
-                  name: _departureController.text, country: Country.france),
-              departureDate: DateTime.parse(_dateController.text),
-              arrivalLocation: Location(
-                  name: _arrivalController.text, country: Country.france),
-              arrivalDateTime: DateTime.parse(_dateController.text),
-              driver: User(
-                firstName: 'Driver',
-                lastName: 'Name',
-                email: 'driver@example.com',
-                phone: '1234567890',
-                profilePicture: 'path/to/profile/picture',
-                verifiedProfile: true,
-              ), // Replace with actual driver data
-              availableSeats: int.parse(_seatsController.text),
-              pricePerSeat: 10.0, // Replace with actual price data
-            ),
-          ),
+        AnimationUtils.createBottomToTopRoute(
+          RidesScreen(matchingRides: matchingRides),
         ),
       );
     }
