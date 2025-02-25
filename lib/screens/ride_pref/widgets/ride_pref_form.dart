@@ -5,6 +5,7 @@ import '../../../model/ride_pref/ride_pref.dart';
 import '../../../model/user/user.dart';
 import '../ride_pref_screen.dart';
 import 'blabutton.dart';
+import 'location_picker_screen.dart';
 
 class RidePrefForm extends StatefulWidget {
   final RidePref initRidePref;
@@ -21,6 +22,12 @@ class _RidePrefFormState extends State<RidePrefForm> {
   late TextEditingController _arrivalController;
   late TextEditingController _dateController;
   late TextEditingController _seatsController;
+
+  final List<Location> _locations = [
+    Location(name: 'Paris', country: Country.france),
+    Location(name: 'London', country: Country.uk),
+    Location(name: 'Madrid', country: Country.spain),
+  ];
 
   @override
   void initState() {
@@ -99,6 +106,21 @@ class _RidePrefFormState extends State<RidePrefForm> {
     });
   }
 
+  void _pickLocation(TextEditingController controller) async {
+    final Location? selectedLocation = await Navigator.push<Location>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LocationPickerScreen(locations: _locations),
+      ),
+    );
+
+    if (selectedLocation != null) {
+      setState(() {
+        controller.text = selectedLocation.name;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -108,18 +130,23 @@ class _RidePrefFormState extends State<RidePrefForm> {
           Row(
             children: [
               Expanded(
-                child: TextFormField(
-                  controller: _departureController,
-                  decoration: const InputDecoration(
-                    labelText: 'Leaving from',
-                    prefixIcon: Icon(Icons.location_on),
+                child: GestureDetector(
+                  onTap: () => _pickLocation(_departureController),
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      controller: _departureController,
+                      decoration: const InputDecoration(
+                        labelText: 'Leaving from',
+                        prefixIcon: Icon(Icons.location_on),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a departure location';
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a departure location';
-                    }
-                    return null;
-                  },
                 ),
               ),
               if (_showSwapButton)
@@ -130,18 +157,29 @@ class _RidePrefFormState extends State<RidePrefForm> {
             ],
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            controller: _arrivalController,
-            decoration: const InputDecoration(
-              labelText: 'Going to',
-              prefixIcon: Icon(Icons.location_on),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter an arrival location';
-              }
-              return null;
-            },
+          Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () => _pickLocation(_arrivalController),
+                  child: AbsorbPointer(
+                    child: TextFormField(
+                      controller: _arrivalController,
+                      decoration: const InputDecoration(
+                        labelText: 'Going to',
+                        prefixIcon: Icon(Icons.location_on),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter an arrival location';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 16),
           TextFormField(
