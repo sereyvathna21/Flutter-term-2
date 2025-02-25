@@ -7,6 +7,7 @@ import 'blaicon.dart'; // Import the BlaIcon
 import 'location_picker_screen.dart';
 import 'rides_screen.dart'; // Import the RidesScreen
 import 'adjust_passenger_screen.dart'; // Import the AdjustPassengerScreen
+import 'date_picker.dart'; // Import the CustomDatePickerScreen
 import '../../../utils/animations_util.dart'; // Import the AnimationUtils
 
 class RidePrefForm extends StatefulWidget {
@@ -40,11 +41,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
         TextEditingController(text: widget.initRidePref.departure.name);
     _arrivalController =
         TextEditingController(text: widget.initRidePref.arrival.name);
-    _dateController = TextEditingController(
-      text: widget.initRidePref.departureDate.toString().isEmpty
-          ? 'Today'
-          : widget.initRidePref.departureDate.toString(),
-    );
+    _dateController = TextEditingController(text: 'Today');
     _seatsController = TextEditingController(
         text: widget.initRidePref.requestedSeats.toString());
 
@@ -78,7 +75,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
       final matchingRides = RidesService.availableRides.where((ride) {
         return ride.departureLocation.name == _departureController.text &&
             ride.arrivalLocation.name == _arrivalController.text &&
-            ride.departureDate.toString() == _dateController.text &&
+            (_dateController.text == 'Today' ||
+                ride.departureDate.toString() == _dateController.text) &&
             ride.availableSeats >= _selectedSeats;
       }).toList();
 
@@ -130,10 +128,31 @@ class _RidePrefFormState extends State<RidePrefForm> {
     }
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await Navigator.push<DateTime>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CustomDatePickerScreen(
+          initialDate: DateTime.now(),
+        ),
+      ),
+    );
+    if (picked != null) {
+      setState(() {
+        _dateController.text = "${picked.toLocal()}".split(' ')[0];
+      });
+    } else {
+      setState(() {
+        _dateController.text = 'Today';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       child: Column(
         children: [
           Row(
@@ -194,19 +213,24 @@ class _RidePrefFormState extends State<RidePrefForm> {
             ],
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            controller: _dateController,
-            decoration: const InputDecoration(
-              labelText: 'Today',
-              prefixIcon: BlaIcon(
-                  icon: Icons.calendar_today, type: BlaIconType.primary),
+          GestureDetector(
+            onTap: () => _selectDate(context),
+            child: AbsorbPointer(
+              child: TextFormField(
+                controller: _dateController,
+                decoration: const InputDecoration(
+                  labelText: 'Today',
+                  prefixIcon: BlaIcon(
+                      icon: Icons.calendar_today, type: BlaIconType.primary),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a date';
+                  }
+                  return null;
+                },
+              ),
             ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a date';
-              }
-              return null;
-            },
           ),
           const SizedBox(height: 16),
           GestureDetector(
