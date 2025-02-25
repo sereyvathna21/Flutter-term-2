@@ -1,65 +1,155 @@
 import 'package:flutter/material.dart';
- 
 import '../../../model/ride/locations.dart';
+import '../../../model/ride/ride.dart';
 import '../../../model/ride_pref/ride_pref.dart';
- 
-///
-/// A Ride Preference From is a view to select:
-///   - A depcarture location
-///   - An arrival location
-///   - A date
-///   - A number of seats
-///
-/// The form can be created with an existing RidePref (optional).
-///
-class RidePrefForm extends StatefulWidget {
-  // The form can be created with an optional initial RidePref.
-  final RidePref? initRidePref;
+import '../../../model/user/user.dart';
+import '../ride_pref_screen.dart';
+import 'blabutton.dart';
 
-  const RidePrefForm({super.key, this.initRidePref});
+class RidePrefForm extends StatefulWidget {
+  final RidePref initRidePref;
+
+  const RidePrefForm({required this.initRidePref, super.key});
 
   @override
-  State<RidePrefForm> createState() => _RidePrefFormState();
+  _RidePrefFormState createState() => _RidePrefFormState();
 }
 
 class _RidePrefFormState extends State<RidePrefForm> {
-  Location? departure;
-  late DateTime departureDate;
-  Location? arrival;
-  late int requestedSeats;
-
-
-
-  // ----------------------------------
-  // Initialize the Form attributes
-  // ----------------------------------
+  final _formKey = GlobalKey<FormState>();
+  late TextEditingController _departureController;
+  late TextEditingController _arrivalController;
+  late TextEditingController _dateController;
+  late TextEditingController _seatsController;
 
   @override
   void initState() {
     super.initState();
-    // TODO 
+    _departureController =
+        TextEditingController(text: widget.initRidePref.departure.name);
+    _arrivalController =
+        TextEditingController(text: widget.initRidePref.arrival.name);
+    _dateController = TextEditingController(
+      text: widget.initRidePref.departureDate.toString().isEmpty
+          ? 'Today'
+          : widget.initRidePref.departureDate.toString(),
+    );
+    _seatsController = TextEditingController(
+        text: widget.initRidePref.requestedSeats.toString());
   }
 
-  // ----------------------------------
-  // Handle events
-  // ----------------------------------
- 
+  @override
+  void dispose() {
+    _departureController.dispose();
+    _arrivalController.dispose();
+    _dateController.dispose();
+    _seatsController.dispose();
+    super.dispose();
+  }
 
-  // ----------------------------------
-  // Compute the widgets rendering
-  // ----------------------------------
-  
+  void _onSearch() {
+    if (_formKey.currentState!.validate()) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FakeRidesScreen(
+            ride: Ride(
+              departureLocation: Location(
+                  name: _departureController.text, country: Country.france),
+              departureDate: DateTime.parse(_dateController.text),
+              arrivalLocation: Location(
+                  name: _arrivalController.text, country: Country.france),
+              arrivalDateTime: DateTime.parse(_dateController.text),
+              driver: User(
+                firstName: 'Driver',
+                lastName: 'Name',
+                email: 'driver@example.com',
+                phone: '1234567890',
+                profilePicture: 'path/to/profile/picture',
+                verifiedProfile: true,
+              ), // Replace with actual driver data
+              availableSeats: int.parse(_seatsController.text),
+              pricePerSeat: 10.0, // Replace with actual price data
+            ),
+          ),
+        ),
+      );
+    }
+  }
 
-  // ----------------------------------
-  // Build the widgets
-  // ----------------------------------
   @override
   Widget build(BuildContext context) {
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [ 
- 
-        ]);
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _departureController,
+            decoration: const InputDecoration(
+              labelText: 'Leaving from',
+              prefixIcon: Icon(Icons.location_on),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a departure location';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _arrivalController,
+            decoration: const InputDecoration(
+              labelText: 'Going to',
+              prefixIcon: Icon(Icons.location_on),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter an arrival location';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _dateController,
+            decoration: const InputDecoration(
+              labelText: 'Today',
+              prefixIcon: Icon(Icons.calendar_today),
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter a date';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _seatsController,
+            decoration: const InputDecoration(
+              labelText: 'Passengers',
+              prefixIcon: Icon(Icons.person),
+            ),
+            keyboardType: TextInputType.number,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter the number of passengers';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: BlaButton(
+              type: BlaButtonType.primary,
+              onPressed: _onSearch,
+              text: 'Search',
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
