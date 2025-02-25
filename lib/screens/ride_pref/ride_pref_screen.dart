@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:week_3_blabla_project/model/ride/locations.dart';
-import 'package:week_3_blabla_project/model/ride/ride.dart'; // Import the Ride model
-import 'package:week_3_blabla_project/model/user/user.dart'; // Import the User model
+import 'package:week_3_blabla_project/model/ride/ride.dart'; // Import the Ride model// Import the User model
 import '../../model/ride_pref/ride_pref.dart';
 import '../../theme/theme.dart';
 import '../../utils/date_time_util.dart';

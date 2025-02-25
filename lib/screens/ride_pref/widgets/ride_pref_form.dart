@@ -36,15 +36,29 @@ class _RidePrefFormState extends State<RidePrefForm> {
     );
     _seatsController = TextEditingController(
         text: widget.initRidePref.requestedSeats.toString());
+
+    _departureController.addListener(_updateSwapButtonVisibility);
+    _arrivalController.addListener(_updateSwapButtonVisibility);
   }
 
   @override
   void dispose() {
+    _departureController.removeListener(_updateSwapButtonVisibility);
+    _arrivalController.removeListener(_updateSwapButtonVisibility);
     _departureController.dispose();
     _arrivalController.dispose();
     _dateController.dispose();
     _seatsController.dispose();
     super.dispose();
+  }
+
+  bool _showSwapButton = false;
+
+  void _updateSwapButtonVisibility() {
+    setState(() {
+      _showSwapButton = _departureController.text.isNotEmpty &&
+          _arrivalController.text.isNotEmpty;
+    });
   }
 
   void _onSearch() {
@@ -77,24 +91,43 @@ class _RidePrefFormState extends State<RidePrefForm> {
     }
   }
 
+  void _swapLocations() {
+    setState(() {
+      final temp = _departureController.text;
+      _departureController.text = _arrivalController.text;
+      _arrivalController.text = temp;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
-            controller: _departureController,
-            decoration: const InputDecoration(
-              labelText: 'Leaving from',
-              prefixIcon: Icon(Icons.location_on),
-            ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter a departure location';
-              }
-              return null;
-            },
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  controller: _departureController,
+                  decoration: const InputDecoration(
+                    labelText: 'Leaving from',
+                    prefixIcon: Icon(Icons.location_on),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter a departure location';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              if (_showSwapButton)
+                IconButton(
+                  icon: const Icon(Icons.swap_vert),
+                  onPressed: _swapLocations,
+                ),
+            ],
           ),
           const SizedBox(height: 16),
           TextFormField(
