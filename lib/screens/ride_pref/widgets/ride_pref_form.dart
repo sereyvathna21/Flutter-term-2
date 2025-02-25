@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../model/ride/locations.dart';
-import '../../../model/ride/ride.dart';
 import '../../../model/ride_pref/ride_pref.dart';
 import '../../../service/rides_service.dart'; // Import the RidesService
 import 'blabutton.dart';
+import 'blaicon.dart'; // Import the BlaIcon
 import 'location_picker_screen.dart';
 import 'rides_screen.dart'; // Import the RidesScreen
+import 'adjust_passenger_screen.dart'; // Import the AdjustPassengerScreen
 import '../../../utils/animations_util.dart'; // Import the AnimationUtils
 
 class RidePrefForm extends StatefulWidget {
@@ -29,6 +30,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
     Location(name: 'London', country: Country.uk),
     Location(name: 'Madrid', country: Country.spain),
   ];
+
+  int _selectedSeats = 1;
 
   @override
   void initState() {
@@ -75,7 +78,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
       final matchingRides = RidesService.availableRides.where((ride) {
         return ride.departureLocation.name == _departureController.text &&
             ride.arrivalLocation.name == _arrivalController.text &&
-            ride.departureDate.toString() == _dateController.text;
+            ride.departureDate.toString() == _dateController.text &&
+            ride.availableSeats >= _selectedSeats;
       }).toList();
 
       Navigator.push(
@@ -110,6 +114,22 @@ class _RidePrefFormState extends State<RidePrefForm> {
     }
   }
 
+  void _adjustPassengers() async {
+    final int? selectedPassengers = await Navigator.push<int>(
+      context,
+      AnimationUtils.createBottomToTopRoute(
+        AdjustPassengerScreen(initialPassengers: _selectedSeats),
+      ),
+    );
+
+    if (selectedPassengers != null) {
+      setState(() {
+        _selectedSeats = selectedPassengers;
+        _seatsController.text = _selectedSeats.toString();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -126,7 +146,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
                       controller: _departureController,
                       decoration: const InputDecoration(
                         labelText: 'Leaving from',
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: BlaIcon(
+                            icon: Icons.location_on, type: BlaIconType.primary),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -140,7 +161,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
               ),
               if (_showSwapButton)
                 IconButton(
-                  icon: const Icon(Icons.swap_vert),
+                  icon: const BlaIcon(
+                      icon: Icons.swap_vert, type: BlaIconType.secondary),
                   onPressed: _swapLocations,
                 ),
             ],
@@ -156,7 +178,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
                       controller: _arrivalController,
                       decoration: const InputDecoration(
                         labelText: 'Going to',
-                        prefixIcon: Icon(Icons.location_on),
+                        prefixIcon: BlaIcon(
+                            icon: Icons.location_on, type: BlaIconType.primary),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -175,7 +198,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
             controller: _dateController,
             decoration: const InputDecoration(
               labelText: 'Today',
-              prefixIcon: Icon(Icons.calendar_today),
+              prefixIcon: BlaIcon(
+                  icon: Icons.calendar_today, type: BlaIconType.primary),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -185,19 +209,25 @@ class _RidePrefFormState extends State<RidePrefForm> {
             },
           ),
           const SizedBox(height: 16),
-          TextFormField(
-            controller: _seatsController,
-            decoration: const InputDecoration(
-              labelText: 'Passengers',
-              prefixIcon: Icon(Icons.person),
+          GestureDetector(
+            onTap: _adjustPassengers,
+            child: AbsorbPointer(
+              child: TextFormField(
+                controller: _seatsController,
+                decoration: const InputDecoration(
+                  labelText: 'Passengers',
+                  prefixIcon:
+                      BlaIcon(icon: Icons.person, type: BlaIconType.primary),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the number of passengers';
+                  }
+                  return null;
+                },
+              ),
             ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter the number of passengers';
-              }
-              return null;
-            },
           ),
           const SizedBox(height: 24),
           SizedBox(

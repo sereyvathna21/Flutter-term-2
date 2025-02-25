@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'blaicon.dart'; // Import the BlaIcon
 
 enum BlaButtonType { primary, secondary }
 
@@ -30,8 +31,14 @@ class BlaButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: onPressed,
         style: style,
-        icon: icon != null ? Icon(icon) : SizedBox.shrink(),
-        label: Text(text),
+        icon: icon != null ? BlaIcon(icon: icon!) : SizedBox.shrink(),
+        label: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
     );
   }
