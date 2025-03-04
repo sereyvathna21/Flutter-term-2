@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../theme/theme.dart';
 import 'blaicon.dart'; // Import the BlaIcon
 
 enum BlaButtonType { primary, secondary }
@@ -19,11 +20,17 @@ class BlaButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Define button style based on type
     final ButtonStyle style = ElevatedButton.styleFrom(
       backgroundColor:
-          type == BlaButtonType.primary ? Colors.blue : Colors.white,
-      foregroundColor: Colors.white,
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+          type == BlaButtonType.primary ? BlaColors.primary : BlaColors.white,
+      foregroundColor: type == BlaButtonType.primary
+          ? BlaColors.white
+          : BlaColors.neutralDark,
+      padding: EdgeInsets.symmetric(vertical: BlaSpacings.m),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(BlaSpacings.radius),
+      ),
     );
 
     return SizedBox(
@@ -31,12 +38,20 @@ class BlaButton extends StatelessWidget {
       child: ElevatedButton.icon(
         onPressed: onPressed,
         style: style,
-        icon: icon != null ? BlaIcon(icon: icon!) : SizedBox.shrink(),
+        icon: icon != null
+            ? BlaIcon(
+                icon: icon!,
+                type: type == BlaButtonType.primary
+                    ? BlaIconType.primary
+                    : BlaIconType.secondary,
+              )
+            : const SizedBox.shrink(),
         label: Text(
           text,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+          style: BlaTextStyles.button.copyWith(
+            color: type == BlaButtonType.primary
+                ? BlaColors.white
+                : BlaColors.neutralDark,
           ),
         ),
       ),

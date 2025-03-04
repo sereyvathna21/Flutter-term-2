@@ -5,7 +5,7 @@ import '../../../utils/date_time_util.dart';
 class RideCard extends StatelessWidget {
   final Ride ride;
 
-  const RideCard({required this.ride, Key? key}) : super(key: key);
+  const RideCard({required this.ride, super.key});
 
   @override
   Widget build(BuildContext context) {

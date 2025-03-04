@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../../model/ride/locations.dart';
+import '../../../repository/location_repository.dart';
+import '../../../repository/mock/mock_location_preferences_repository.dart';
 
 class LocationPickerScreen extends StatefulWidget {
   final List<Location> locations;
 
-  const LocationPickerScreen({required this.locations, Key? key})
-      : super(key: key);
+  const LocationPickerScreen({required this.locations, super.key});
 
   @override
   _LocationPickerScreenState createState() => _LocationPickerScreenState();
@@ -37,6 +38,22 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           .where((location) => location.name.toLowerCase().contains(query))
           .toList();
     });
+  }
+
+//location repository
+  List<Location> getLocationsFor(String text) {
+    // Instantiate the repository correctly
+    InMemoryLocationRepository locationRepository =
+        InMemoryLocationRepository();
+
+    // Use getAllLocations() to retrieve the list of locations
+    return locationRepository
+        .getAllLocations()
+        .where(
+          (location) =>
+              location.name.toUpperCase().contains(text.toUpperCase()),
+        )
+        .toList();
   }
 
   @override

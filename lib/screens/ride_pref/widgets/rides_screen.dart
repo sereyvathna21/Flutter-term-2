@@ -5,7 +5,7 @@ import 'ride_card.dart';
 class RidesScreen extends StatelessWidget {
   final List<Ride> matchingRides;
 
-  const RidesScreen({required this.matchingRides, Key? key}) : super(key: key);
+  const RidesScreen({required this.matchingRides, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,6 +6,7 @@ class CustomDatePickerScreen extends StatefulWidget {
   const CustomDatePickerScreen({this.initialDate, super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomDatePickerScreenState createState() => _CustomDatePickerScreenState();
 }
 

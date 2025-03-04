@@ -4,7 +4,8 @@
 enum Country {
   france('France'),
   uk('United Kingdom'),
-  spain('Spain');
+  spain('Spain'), // Add a comma here
+  cambodia('Cambodia'); // Now this is valid
 
   final String name;
 
