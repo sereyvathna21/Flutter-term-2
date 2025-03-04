@@ -2,7 +2,10 @@ import '../dummy_data/dummy_data.dart';
 import '../model/ride/ride.dart';
 import '../model/ride_pref/ride_pref.dart';
 
-/// Enum defining different sorting criteria for rides
+////
+///   This service handles:
+///   - The list of available rides
+///
 enum RideSortType {
   departure, // Sort by departure location
   departureDate, // Sort by departure date and time
@@ -10,10 +13,6 @@ enum RideSortType {
   requestedSeats, // Sort by number of requested seats
 }
 
-////
-///   This service handles:
-///   - The list of available rides
-///
 class RidesService {
   // Singleton instance
   static final RidesService _instance = RidesService._internal();
