@@ -1,5 +1,5 @@
 import '../../model/ride/locations.dart';
-import '../location_repository.dart';
+import '../location_preference_repository.dart';
 
 class InMemoryLocationRepository implements LocationRepository {
   // Predefined list of Cambodian cities

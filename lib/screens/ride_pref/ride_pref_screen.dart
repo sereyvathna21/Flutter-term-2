@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:week_3_blabla_project/model/ride/locations.dart';
-import 'package:week_3_blabla_project/model/ride/ride.dart'; // Import the Ride model// Import the User model
+
 import '../../model/ride_pref/ride_pref.dart';
+import '../../service/ride_prefs_service.dart';
 import '../../theme/theme.dart';
-import '../../utils/date_time_util.dart';
+
+import '../../utils/animations_util.dart';
+import '../rides/rides_screen.dart';
 import 'widgets/ride_pref_form.dart';
 import 'widgets/ride_pref_history_tile.dart';
-import 'package:week_3_blabla_project/service/rides_service.dart'; // Import the RideService
 
 const String blablaHomeImagePath = 'assets/images/blabla_home.png';
 
+///
+/// This screen allows user to:
+/// - Enter his/her ride preference and launch a search on it
+/// - Or select a last entered ride preferences and launch a search on it
+///
 class RidePrefScreen extends StatefulWidget {
   const RidePrefScreen({super.key});
 
@@ -18,62 +24,64 @@ class RidePrefScreen extends StatefulWidget {
 }
 
 class _RidePrefScreenState extends State<RidePrefScreen> {
-  void onRideSelected(Ride ride) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => FakeRidesScreen(ride: ride)),
-    );
+ 
+  onRidePrefSelected(RidePreference newPreference) async {
+
+    // 1 - Update the current preference
+    RidePrefService.instance.setCurrentPreference(newPreference);
+ 
+    // 2 - Navigate to the rides screen (with a buttom to top animation)
+    await Navigator.of(context).push(AnimationUtils.createBottomToTopRoute(RidesScreen()));
+  
+    // 3 - After wait  - Update the state   -- TODO MAKE IT WITH STATE MANAGEMENT
+    setState(() { });
   }
 
   @override
   Widget build(BuildContext context) {
+
+    RidePreference? currentRidePreference = RidePrefService.instance.currentPreference;
+    List<RidePreference> pastPreferences = RidePrefService.instance.getPastPreferences();
+
     return Stack(
       children: [
-        const BlaBackground(),
+        // 1 - Background  Image
+        BlaBackground(),
+
+        // 2 - Foreground content
         Column(
           children: [
-            const SizedBox(height: 16),
+            SizedBox(height: BlaSpacings.m),
             Text(
               "Your pick of rides at low price",
               style: BlaTextStyles.heading.copyWith(color: Colors.white),
             ),
-            const SizedBox(height: 100),
+            SizedBox(height: 100),
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: BlaSpacings.xxl),
+              margin: EdgeInsets.symmetric(horizontal: BlaSpacings.xxl),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                color: Colors.white, // White background
+                borderRadius: BorderRadius.circular(16), // Rounded corners
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  RidePrefForm(
-                    initRidePref: RidePref(
-                      departure: Location(name: '', country: Country.france),
-                      departureDate: DateTime.now(),
-                      arrival: Location(name: '', country: Country.france),
-                      requestedSeats: 1,
-                    ),
-                  ),
-                  const SizedBox(height: BlaSpacings.m),
+                  // 2.1 Display the Form to input the ride preferences
+                  RidePrefForm(initialPreference: currentRidePreference, onSubmit: onRidePrefSelected),
+                  SizedBox(height: BlaSpacings.m),
+
+                  // 2.2 Optionally display a list of past preferences
                   SizedBox(
-                    height: 200,
+                    height: 200, // Set a fixed height
                     child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: RidesService.availableRides.length,
+                      shrinkWrap: true, // Fix ListView height issue
+                      physics: AlwaysScrollableScrollPhysics(),
+                      itemCount: pastPreferences.length,
                       itemBuilder: (ctx, index) => RidePrefHistoryTile(
-                        ridePref: RidePref(
-                          departure:
-                              Location(name: '', country: Country.france),
-                          departureDate: DateTime.now(),
-                          arrival: Location(name: '', country: Country.france),
-                          requestedSeats: 1,
-                        ),
-                        onPressed: () => onRideSelected(
-                          RidesService.availableRides[index],
-                        ),
+                        ridePref: pastPreferences[index],
+                        onPressed: () =>
+                            onRidePrefSelected(pastPreferences[index]),
                       ),
                     ),
                   ),
@@ -83,58 +91,6 @@ class _RidePrefScreenState extends State<RidePrefScreen> {
           ],
         ),
       ],
-    );
-  }
-}
-
-class FakeRidesScreen extends StatelessWidget {
-  final Ride ride;
-
-  const FakeRidesScreen({required this.ride, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your pick of rides at low price'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          RideCard(ride: ride),
-        ],
-      ),
-    );
-  }
-}
-
-class RideCard extends StatelessWidget {
-  final Ride ride;
-
-  const RideCard({required this.ride, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${ride.departureLocation.name} - ${ride.arrivalLocation.name}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Text('Date: ${DateTimeUtils.formatDateTime(ride.departureDate)}'),
-            const SizedBox(height: 8),
-            Text('Passengers: ${ride.remainingSeats} seats available'),
-            const SizedBox(height: 8),
-            Text('Price: \$${ride.pricePerSeat.toStringAsFixed(2)} per seat'),
-          ],
-        ),
-      ),
     );
   }
 }
@@ -149,7 +105,7 @@ class BlaBackground extends StatelessWidget {
       height: 340,
       child: Image.asset(
         blablaHomeImagePath,
-        fit: BoxFit.cover,
+        fit: BoxFit.cover, // Adjust image fit to cover the container
       ),
     );
   }
