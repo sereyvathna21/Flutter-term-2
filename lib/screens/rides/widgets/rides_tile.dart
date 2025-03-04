@@ -14,9 +14,9 @@ class RideTile extends StatelessWidget {
   const RideTile({super.key, required this.ride, required this.onPressed});
 
   String get departure => "Departure: ${ride.departureLocation.name}";
-  String get arrival => "Departure: ${ride.arrivalLocation.name}";
+  String get arrival => "Arrival: ${ride.arrivalLocation.name}";
   String get time => "Time: ${DateTimeUtils.formatTime(ride.departureDate)}";
-  String get price => "Departure: ${ride.pricePerSeat}";
+  String get seats => "Available Seats: ${ride.requestedSeats}";
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +26,17 @@ class RideTile extends StatelessWidget {
         child: Column(
           children: [
             Text(departure,
-                style: BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
+                style:
+                    BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
             Text(arrival,
-                style: BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
+                style:
+                    BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
             Text(time,
-                style: BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
-            Text(price,
-                style: BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
+                style:
+                    BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
+            Text(seats,
+                style:
+                    BlaTextStyles.label.copyWith(color: BlaColors.textLight)),
           ],
         ),
       ),

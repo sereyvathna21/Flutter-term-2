@@ -23,6 +23,6 @@ class RidePreference {
     return 'RidePref(departure: ${departure.name}, '
         'departureDate: ${departureDate.toIso8601String()}, '
         'arrival: ${arrival.name}, '
-        'requestedSeats: $requestedSeats)';
+        ' requestedSeats: $requestedSeats)';
   }
 }

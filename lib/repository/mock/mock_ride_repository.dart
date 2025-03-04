@@ -1,44 +1,43 @@
 import 'package:week_3_blabla_project/model/ride/ride.dart';
 import 'package:week_3_blabla_project/model/ride_pref/ride_pref.dart';
-import 'package:week_3_blabla_project/dummy_data/dummy_data.dart'
-    show fakeLocations, fakeRides;
+import '../../dummy_data/dummy_data.dart';
 import '../../service/rides_service.dart';
 import '../ride_repository.dart';
 
 class MockRidesRepository implements RideRepository {
   final List<RidePreference> pastPreferences = [
     RidePreference(
-      departure: fakeLocations[40], // Battambang
-      arrival: fakeLocations[39], // Siem Reap
-      departureDate: DateTime.now().add(Duration(hours: 5, minutes: 30)),
+      departure: fakeLocations[30], // Battambang
+      arrival: fakeLocations[35], // Siem Reap
+      departureDate: DateTime.now(),
       requestedSeats: 2,
       petsAccepted: false,
     ),
     RidePreference(
-      departure: fakeLocations[40], // Battambang
-      arrival: fakeLocations[39], // Siem Reap
-      departureDate: DateTime.now().add(Duration(hours: 8)),
+      departure: fakeLocations[30], // Battambang
+      arrival: fakeLocations[35], // Siem Reap
+      departureDate: DateTime.now(),
       requestedSeats: 1,
       petsAccepted: false,
     ),
     RidePreference(
-      departure: fakeLocations[40], // Battambang
-      arrival: fakeLocations[39], // Siem Reap
-      departureDate: DateTime.now().add(Duration(hours: 5)),
+      departure: fakeLocations[30], // Battambang
+      arrival: fakeLocations[35], // Siem Reap
+      departureDate: DateTime.now(),
       requestedSeats: 1,
       petsAccepted: false,
     ),
     RidePreference(
-      departure: fakeLocations[40], // Battambang
-      arrival: fakeLocations[39], // Siem Reap
-      departureDate: DateTime.now().add(Duration(hours: 8)),
+      departure: fakeLocations[30], // Battambang
+      arrival: fakeLocations[35], // Siem Reap
+      departureDate: DateTime.now(),
       requestedSeats: 2,
       petsAccepted: true,
     ),
     RidePreference(
-      departure: fakeLocations[40], // Battambang
-      arrival: fakeLocations[39], // Siem Reap
-      departureDate: DateTime.now().add(Duration(hours: 5)),
+      departure: fakeLocations[30], // Battambang
+      arrival: fakeLocations[35], // Siem Reap
+      departureDate: DateTime.now(),
       requestedSeats: 1,
       petsAccepted: false,
     ),

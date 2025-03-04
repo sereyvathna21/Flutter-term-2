@@ -6,7 +6,7 @@ enum RideStatus {
   created,
   published,
   ongoing,
-  finished;
+  finished,
 }
 
 ///
@@ -15,16 +15,9 @@ enum RideStatus {
 class Ride {
   final Location departureLocation;
   final DateTime departureDate;
-
   final Location arrivalLocation;
-  final DateTime arrivalDateTime;
-
-  final User driver;
-
-  final int availableSeats;
-  final double pricePerSeat;
-
-  final bool petsAccepted; // Corrected property definition
+  final int requestedSeats;
+  final bool petsAccepted;
 
   RideStatus status = RideStatus.created;
 
@@ -34,24 +27,25 @@ class Ride {
     required this.departureLocation,
     required this.departureDate,
     required this.arrivalLocation,
-    required this.arrivalDateTime,
-    required this.driver,
-    required this.availableSeats,
-    required this.pricePerSeat,
-    required this.petsAccepted, // Added to constructor
+    required this.requestedSeats,
+    required this.petsAccepted,
+    required String user,
   });
+
+  // Calculate arrivalDateTime based on departureDate and duration
+  DateTime get arrivalDateTime =>
+      departureDate.add(Duration(hours: 2)); // Example duration
 
   void addPassenger(User passenger) {
     passengers.add(passenger);
   }
 
-  int get remainingSeats => availableSeats - passengers.length;
+  int get remainingSeats => requestedSeats - passengers.length;
 
   @override
   String toString() {
     return 'Ride from $departureLocation at ${DateTimeUtils.formatDateTime(departureDate)} '
         'to $arrivalLocation arriving at ${DateTimeUtils.formatDateTime(arrivalDateTime)}, '
-        'Driver: $driver, Seats: $availableSeats, Price: \$${pricePerSeat.toStringAsFixed(2)}, '
-        'Pets Accepted: $petsAccepted';
+        'Seats: $requestedSeats, Pets Accepted: $petsAccepted';
   }
 }

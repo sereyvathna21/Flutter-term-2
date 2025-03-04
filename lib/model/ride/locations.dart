@@ -19,7 +19,7 @@ class Location {
   final String name;
   final Country country;
 
-  const Location({required this.name, required this.country});
+  const Location({required this.name, required this.country, });
 
   // Copy constructor
   Location.copy(Location other)

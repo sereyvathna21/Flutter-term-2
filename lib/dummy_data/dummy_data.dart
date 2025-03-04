@@ -164,24 +164,21 @@ List<Ride> fakeRides = List.generate(50, (index) {
   } while (departureLocation == arrivalLocation);
 
   // Select a random driver
-  User driver = fakeUsers[random.nextInt(fakeUsers.length)];
 
   // Random ride details
   DateTime departureTime = DateTime.now()
       .add(Duration(days: random.nextInt(10), hours: random.nextInt(24)));
-  DateTime arrivalTime = departureTime
+  departureTime
       .add(Duration(hours: random.nextInt(5) + 2)); // Rides take 2-6 hours
-  int availableSeats = random.nextInt(4) + 1; // Between 1 and 4 seats
-  double pricePerSeat = (random.nextDouble() * 20 + 5)
-      .roundToDouble(); // Price between 5€ and 25€
+  int requestedSeats = random.nextInt(4) + 1; // Between 1 and 4 seats
+  (random.nextDouble() * 20 + 5).roundToDouble(); // Price between 5€ and 25€
 
   return Ride(
-      departureLocation: departureLocation,
-      departureDate: departureTime,
-      arrivalLocation: arrivalLocation,
-      arrivalDateTime: arrivalTime,
-      driver: driver,
-      availableSeats: availableSeats,
-      pricePerSeat: pricePerSeat,
-      petsAccepted: random.nextBool());
+    departureLocation: departureLocation,
+    arrivalLocation: arrivalLocation,
+    departureDate: departureTime,
+    requestedSeats: requestedSeats,
+    petsAccepted: random.nextBool(), // Randomly assign petsAccepted
+    user: '', // Assuming the driver is the user
+  );
 });
