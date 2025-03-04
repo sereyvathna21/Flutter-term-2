@@ -1,3 +1,5 @@
+import 'package:week_3_blabla_project/repository/mock/mock_ride_repository.dart';
+
 import '../dummy_data/dummy_data.dart';
 import '../model/ride/ride.dart';
 import '../model/ride_pref/ride_pref.dart';
@@ -21,7 +23,7 @@ class RidesService {
   RidesService._internal();
 
   // Factory constructor to return the singleton instance
-  factory RidesService() {
+  factory RidesService(MockRidesRepository mockRidesRepository) {
     return _instance;
   }
 

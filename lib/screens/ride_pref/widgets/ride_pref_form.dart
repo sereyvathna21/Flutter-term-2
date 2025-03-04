@@ -20,7 +20,8 @@ import 'ride_pref_input_tile.dart';
 /// The form can be created with an existing RidePref (optional).
 ///
 class RidePrefForm extends StatefulWidget {
-  const RidePrefForm( {super.key, required this.initialPreference, required this.onSubmit});
+  const RidePrefForm(
+      {super.key, required this.initialPreference, required this.onSubmit});
 
   final RidePreference? initialPreference;
   final Function(RidePreference preference) onSubmit;
@@ -42,7 +43,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
   @override
   void initState() {
     super.initState();
- 
+
     if (widget.initialPreference != null) {
       RidePreference current = widget.initialPreference!;
       departure = current.departure;
@@ -104,7 +105,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
           departure: departure!,
           departureDate: departureDate,
           arrival: arrival!,
-          requestedSeats: requestedSeats);
+          requestedSeats: requestedSeats,
+          petsAccepted: false);
 
       // 3 - Callback withg the new preference
       widget.onSubmit(newPreference);

@@ -61,37 +61,42 @@ List<RidePreference> fakeRidePrefs = [
     departure: fakeLocations[0], // London
     departureDate: DateTime.now().add(Duration(days: 1)), // Tomorrow
     arrival: fakeLocations[3], // Paris
-    requestedSeats: 2,
+    requestedSeats: 2, petsAccepted: false,
   ),
   RidePreference(
     departure: fakeLocations[1], // Manchester
     departureDate: DateTime.now().add(Duration(days: 7)), // Next week
     arrival: fakeLocations[4], // Lyon
     requestedSeats: 3,
+    petsAccepted: false,
   ),
   RidePreference(
     departure: fakeLocations[2], // Birmingham
     departureDate: DateTime.now(), // Today
     arrival: fakeLocations[5], // Marseille
     requestedSeats: 1,
+    petsAccepted: false,
   ),
   RidePreference(
     departure: fakeLocations[0], // London
     departureDate: DateTime.now().add(Duration(days: 1)), // Tomorrow
     arrival: fakeLocations[3], // Paris
     requestedSeats: 2,
+    petsAccepted: false,
   ),
   RidePreference(
     departure: fakeLocations[4], // Manchester
     departureDate: DateTime.now().add(Duration(days: 7)), // Next week
     arrival: fakeLocations[0], // Lyon
     requestedSeats: 3,
+    petsAccepted: true,
   ),
   RidePreference(
     departure: fakeLocations[5], // Birmingham
     departureDate: DateTime.now(), // Today
     arrival: fakeLocations[1], // Marseille
     requestedSeats: 1,
+    petsAccepted: false,
   ),
 ];
 
@@ -178,5 +183,5 @@ List<Ride> fakeRides = List.generate(50, (index) {
       driver: driver,
       availableSeats: availableSeats,
       pricePerSeat: pricePerSeat,
-      acceptPets: random.nextBool());
+      petsAccepted: random.nextBool());
 });

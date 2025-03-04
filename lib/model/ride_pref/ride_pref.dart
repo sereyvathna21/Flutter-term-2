@@ -9,14 +9,13 @@ class RidePreference {
   final DateTime departureDate;
   final Location arrival;
   final int requestedSeats;
-  final bool acceptPets;
 
   const RidePreference({
     required this.departure,
     required this.departureDate,
     required this.arrival,
     required this.requestedSeats,
-    this.acceptPets = false,
+    required bool petsAccepted,
   });
 
   @override

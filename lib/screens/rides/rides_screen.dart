@@ -4,6 +4,7 @@ import 'package:week_3_blabla_project/screens/rides/widgets/ride_pref_bar.dart';
 import '../../dummy_data/dummy_data.dart';
 import '../../model/ride/ride.dart';
 import '../../model/ride_pref/ride_pref.dart';
+import '../../repository/mock/mock_ride_repository.dart';
 import '../../service/rides_service.dart';
 import '../../theme/theme.dart';
 
@@ -24,7 +25,7 @@ class _RidesScreenState extends State<RidesScreen> {
   RidePreference currentPreference =
       fakeRidePrefs[0]; // TODO 1 :  We should get it from the service
 
-  final RidesService ridesService = RidesService();
+  final RidesService ridesService = RidesService(MockRidesRepository());
   List<Ride> get matchingRides => ridesService.getRidesFor(currentPreference);
 
   void onBackPressed() {
