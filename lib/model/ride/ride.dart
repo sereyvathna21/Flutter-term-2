@@ -37,6 +37,7 @@ class Ride {
     required this.driver,
     required this.availableSeats,
     required this.pricePerSeat,
+    required bool acceptPets,
   });
 
   void addPassenger(User passenger) {

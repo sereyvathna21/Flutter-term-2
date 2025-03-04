@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:week_3_blabla_project/model/ride/locations.dart';
-
 import '../../repository/mock/mock_location_preferences_repository.dart';
-import '../../service/locations_service.dart';
 import '../../theme/theme.dart';
 
 ///

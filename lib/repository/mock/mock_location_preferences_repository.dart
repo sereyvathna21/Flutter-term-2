@@ -16,7 +16,6 @@ class InMemoryLocationRepository implements LocationRepository {
     return List.unmodifiable(_locations);
   }
 
-  @override
   Location? findLocationByName(String name) {
     return _locations.firstWhere(
       (location) => location.name.toLowerCase() == name.toLowerCase(),

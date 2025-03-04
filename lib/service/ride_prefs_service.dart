@@ -1,5 +1,3 @@
-import 'package:week_3_blabla_project/repository/mock/mock_ride_preferences_repository.dart';
-
 import '../model/ride_pref/ride_pref.dart';
 import '../repository/ride_preferences_repository.dart';
 
@@ -39,9 +37,10 @@ class RidePrefService {
   ///
   static RidePrefService get instance {
     if (_instance == null) {
-		  throw Exception("RidePreferencesService is not initialized. Call initialize() first.");
-		}
-		return _instance!;
+      throw Exception(
+          "RidePreferencesService is not initialized. Call initialize() first.");
+    }
+    return _instance!;
   }
 
   // Current preference

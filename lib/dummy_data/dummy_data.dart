@@ -171,12 +171,12 @@ List<Ride> fakeRides = List.generate(50, (index) {
       .roundToDouble(); // Price between 5€ and 25€
 
   return Ride(
-    departureLocation: departureLocation,
-    departureDate: departureTime,
-    arrivalLocation: arrivalLocation,
-    arrivalDateTime: arrivalTime,
-    driver: driver,
-    availableSeats: availableSeats,
-    pricePerSeat: pricePerSeat,
-  );
+      departureLocation: departureLocation,
+      departureDate: departureTime,
+      arrivalLocation: arrivalLocation,
+      arrivalDateTime: arrivalTime,
+      driver: driver,
+      availableSeats: availableSeats,
+      pricePerSeat: pricePerSeat,
+      acceptPets: random.nextBool());
 });
