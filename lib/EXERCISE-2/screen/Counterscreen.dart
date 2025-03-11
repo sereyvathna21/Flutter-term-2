@@ -8,9 +8,11 @@ class CounterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('CounterScreen rebuild');
     return Center(
       child: Consumer<ColorCounters>(
         builder: (context, colorCounters, child) {
+          print('Consumer<ColorCounters> rebuild');
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

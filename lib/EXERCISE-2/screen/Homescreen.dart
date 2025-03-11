@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('HomeScreen rebuild');
     return Scaffold(
       appBar: AppBar(
         title: Text('Color Counters'),
@@ -34,11 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.color_lens),
-            label: 'Taps',
+            label: 'Tap Colors',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.info),
-            label: 'Static',
+            label: 'Tap Count',
           ),
         ],
         currentIndex: _selectedIndex,

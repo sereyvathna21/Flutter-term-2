@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../provider/ColorCounters.dart';
 
 class StaticScreen extends StatelessWidget {
@@ -8,9 +7,11 @@ class StaticScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('StaticScreen rebuild');
     return Center(
       child: Consumer<ColorCounters>(
         builder: (context, colorCounters, child) {
+          print('Consumer<ColorCounters> rebuild in StaticScreen');
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

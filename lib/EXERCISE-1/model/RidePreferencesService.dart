@@ -11,10 +11,6 @@ class RidePreferencesService {
     _listeners.add(listener);
   }
 
-  void removeListener(RidePreferencesListener listener) {
-    _listeners.remove(listener);
-  }
-
   void notifyListeners() {
     for (var listener in _listeners) {
       listener.onPreferenceChanged(_currentPreference);
