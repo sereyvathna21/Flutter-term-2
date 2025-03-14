@@ -8,6 +8,7 @@ class PostProvider extends ChangeNotifier {
   final PostRepository _repository;
 
   AsyncValue<Post>? postValue;
+  AsyncValue<List<Post>>? postsValue; // Added for list of posts
 
   PostProvider({required PostRepository repository}) : _repository = repository;
 
@@ -25,6 +26,25 @@ class PostProvider extends ChangeNotifier {
     } catch (error) {
       // 4  Set error state
       postValue = AsyncValue.error(error);
+    }
+
+    notifyListeners();
+  }
+
+  void fetchPosts() async {
+    // 1-  Set loading state
+    postsValue = AsyncValue.loading();
+    notifyListeners();
+
+    try {
+      // 2   Fetch the data
+      List<Post> posts = await _repository.getPosts();
+
+      // 3  Set success state
+      postsValue = AsyncValue.success(posts);
+    } catch (error) {
+      // 4  Set error state
+      postsValue = AsyncValue.error(error);
     }
 
     notifyListeners();

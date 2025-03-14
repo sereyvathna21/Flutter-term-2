@@ -16,4 +16,27 @@ class MockPostRepository extends PostRepository {
       );
     });
   }
+
+  @override
+  Future<List<Post>> getPosts() {
+    return Future.delayed(Duration(seconds: 5), () {
+      return [
+        // Post(
+        //   id: 1,
+        //   title: 'Post 1',
+        //   description: 'Description for post 1',
+        // ),
+        // Post(
+        //   id: 2,
+        //   title: 'Post 2',
+        //   description: 'Description for post 2',
+        // ),
+        // Post(
+        //   id: 3,
+        //   title: 'Post 3',
+        //   description: 'Description for post 3',
+        // ),
+      ];
+    });
+  }
 }
