@@ -1,14 +1,31 @@
+import 'package:flutter/material.dart';
 import '../models/course.dart';
+import '../Repository/course_repository.dart';
 
-List<Course> _courses = [
-  Course(id: 1, name: 'HTML', scores: []),
-  Course(id: 2, name: 'JAVA', scores: []),
-];
+class CourseProvider with ChangeNotifier {
+  final CourseRepository _repository;
 
-List<Course> getCoursesFromMock() {
-  return _courses;
-}
+  CourseProvider(this._repository);
 
-void addScoreToMock(Course course, CourseScore score) {
-  course.addScore(score);
+  List<Course> _courses = [];
+
+  List<Course> get courses => _courses;
+
+  void fetchCourses() {
+    _courses = _repository.getCourses();
+    notifyListeners();
+  }
+
+  List<CourseScore> getScores(String courseId) {
+    return _courses
+        .firstWhere((course) => course.id.toString() == courseId)
+        .scores;
+  }
+
+  void addScore(String courseId, CourseScore score) {
+    Course course =
+        _courses.firstWhere((course) => course.id.toString() == courseId);
+    _repository.addScore(course, score);
+    notifyListeners();
+  }
 }
