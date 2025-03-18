@@ -12,13 +12,16 @@ class CourseProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Course getCourseFor(String courseId) {
-    return _courses.firstWhere((course) => course.id.toString() == courseId);
+  List<CourseScore> getScores(String courseId) {
+    return _courses
+        .firstWhere((course) => course.id.toString() == courseId)
+        .scores;
   }
 
   void addScore(String courseId, CourseScore score) {
-    Course course = getCourseFor(courseId);
-    addScore(course as String, score);
+    Course course =
+        _courses.firstWhere((course) => course.id.toString() == courseId);
+    course.scores.add(score);
     notifyListeners();
   }
 }
