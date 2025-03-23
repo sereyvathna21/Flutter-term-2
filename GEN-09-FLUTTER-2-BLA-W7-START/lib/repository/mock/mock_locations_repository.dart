@@ -2,20 +2,21 @@ import '../../model/location/locations.dart';
 import '../locations_repository.dart';
 
 class MockLocationsRepository extends LocationsRepository {
-  const Location phnomPenh = Location(
+  static const Location phnomPenh = Location(
     name: "Phnom Penh",
     country: Country.cambodia,
   );
-  const Location siemReap = Location(
+  static const Location siemReap = Location(
     name: "Siem Reap",
     country: Country.cambodia,
   );
-  const Location sihanoukville = Location(
+  static const Location sihanoukville = Location(
     name: "Sihanoukville",
     country: Country.cambodia,
   );
-  const Location kampot = Location(name: "Kampot", country: Country.cambodia);
-  const Location battambang = Location(
+  static const Location kampot =
+      Location(name: "Kampot", country: Country.cambodia);
+  static const Location battambang = Location(
     name: "Battambang",
     country: Country.cambodia,
   );
