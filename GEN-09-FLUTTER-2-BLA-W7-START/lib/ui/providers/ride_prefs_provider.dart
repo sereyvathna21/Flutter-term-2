@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../model/ride/ride_pref.dart';
-import '../../repository/ride_preferences_repository.dart';
+import '../../Data/repository/ride_preferences_repository.dart';
 import 'async.dart';
 
 class RidesPreferencesProvider extends ChangeNotifier {
