@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week_3_blabla_project/ui/providers/async.dart';
 
 import '../../../model/ride/ride_pref.dart';
 import '../../providers/ride_prefs_provider.dart';
@@ -38,16 +39,21 @@ class RidePrefScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentRidePreference =
         context.watch<RidesPreferencesProvider>().currentPreference;
-    final pastPreferences =
-        context.watch<RidesPreferencesProvider>().preferencesHistory;
+    final pastPreferencesState =
+        context.watch<RidesPreferencesProvider>().pastPreferences;
 
-    return Stack(
-      children: [
-        // 1 - Background Image
-        const BlaBackground(),
+    Widget content;
 
-        // 2 - Foreground content
-        Column(
+    switch (pastPreferencesState.state) {
+      case AsyncValueState.loading:
+        content = const Center(child: Text('Loading...'));
+        break;
+      case AsyncValueState.error:
+        content = const Center(child: Text('No connection. Try later'));
+        break;
+      case AsyncValueState.success:
+        final pastPreferences = pastPreferencesState.data!;
+        content = Column(
           children: [
             SizedBox(height: BlaSpacings.m),
             Text(
@@ -89,7 +95,17 @@ class RidePrefScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
+        );
+        break;
+    }
+
+    return Stack(
+      children: [
+        // 1 - Background Image
+        const BlaBackground(),
+
+        // 2 - Foreground content
+        content,
       ],
     );
   }

@@ -1,39 +1,57 @@
 import 'package:flutter/material.dart';
 import '../../model/ride/ride_pref.dart';
 import '../../repository/ride_preferences_repository.dart';
+import 'async.dart';
 
 class RidesPreferencesProvider extends ChangeNotifier {
   RidePreference? _currentPreference;
-  final List<RidePreference> _pastPreferences = [];
+  late AsyncValue<List<RidePreference>> pastPreferences;
 
   final RidePreferencesRepository repository;
 
   RidesPreferencesProvider({required this.repository}) {
-    // For now past preferences are fetched only 1 time
-    _pastPreferences.addAll(repository.getPastPreferences());
+    fetchPastPreferences();
   }
 
   RidePreference? get currentPreference => _currentPreference;
+
+  Future<void> fetchPastPreferences() async {
+    // 1- Handle loading
+    pastPreferences = AsyncValue.loading();
+    notifyListeners();
+    try {
+      // 2 Fetch data
+      List<RidePreference> pastPrefs = await repository.getPastPreferences();
+      // 3 Handle success
+      pastPreferences = AsyncValue.success(pastPrefs);
+    } catch (error) {
+      // 4 Handle error
+      pastPreferences = AsyncValue.error(error);
+    }
+    notifyListeners();
+  }
 
   void setCurrentPreferrence(RidePreference pref) {
     if (pref != _currentPreference) {
       _currentPreference = pref;
 
-      if (!_pastPreferences.contains(pref)) {
+      if (pastPreferences.data != null &&
+          !pastPreferences.data!.contains(pref)) {
         _addPreference(pref);
       } else {
         // Move the existing preference to the end of the list
-        _pastPreferences.remove(pref);
+        pastPreferences.data!.remove(pref);
         _addPreference(pref);
       }
       notifyListeners();
     }
   }
 
-  void _addPreference(RidePreference preference) {
-    _pastPreferences.add(preference);
+  void _addPreference(RidePreference preference) async {
+    await repository.addPreference(preference);
+    await fetchPastPreferences();
   }
 
   List<RidePreference> get preferencesHistory =>
-      _pastPreferences.reversed.toList();
+      pastPreferences.data?.reversed.toList() ?? [];
 }
