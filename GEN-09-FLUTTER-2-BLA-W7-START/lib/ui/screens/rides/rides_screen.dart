@@ -30,9 +30,6 @@ class RidesScreen extends StatelessWidget {
     context
         .read<RidesPreferencesProvider>()
         .setCurrentPreferrence(newPreference);
-
-    // 2 - Update the state
-    // No need to call setState as we are using a provider
   }
 
   void onPreferencePressed(
@@ -51,9 +48,6 @@ class RidesScreen extends StatelessWidget {
       context
           .read<RidesPreferencesProvider>()
           .setCurrentPreferrence(newPreference);
-
-      // 2 - Update the state
-      // No need to call setState as we are using a provider
     }
   }
 

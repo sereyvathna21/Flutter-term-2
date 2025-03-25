@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:week_3_blabla_project/ui/providers/async.dart';
 
 import '../../../model/ride/ride_pref.dart';
+import '../../providers/async.dart';
 import '../../providers/ride_prefs_provider.dart';
 import '../../../utils/animations_util.dart';
 import '../../theme/theme.dart';
 import '../rides/rides_screen.dart';
 import 'widgets/ride_pref_form.dart';
 import 'widgets/ride_pref_history_tile.dart';
+import '../../widgets/errors/bla_error_screen.dart';
 
 const String blablaHomeImagePath = 'assets/images/blabla_home.png';
 
@@ -22,17 +23,12 @@ class RidePrefScreen extends StatelessWidget {
 
   void onRidePrefSelected(
       BuildContext context, RidePreference newPreference) async {
-    // 1 - Update the current preference
     context
         .read<RidesPreferencesProvider>()
         .setCurrentPreferrence(newPreference);
 
-    // 2 - Navigate to the rides screen (with a bottom to top animation)
     await Navigator.of(context)
         .push(AnimationUtils.createBottomToTopRoute(RidesScreen()));
-
-    // 3 - After wait - Update the state
-    // No need to call setState as we are using a provider
   }
 
   @override
@@ -46,10 +42,10 @@ class RidePrefScreen extends StatelessWidget {
 
     switch (pastPreferencesState.state) {
       case AsyncValueState.loading:
-        content = const Center(child: Text('Loading...'));
+        content = const BlaError(message: 'Loading...');
         break;
       case AsyncValueState.error:
-        content = const Center(child: Text('No connection. Try later'));
+        content = const BlaError(message: 'No connection. Try later');
         break;
       case AsyncValueState.success:
         final pastPreferences = pastPreferencesState.data!;
@@ -71,13 +67,10 @@ class RidePrefScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // 2.1 Display the Form to input the ride preferences
                   RidePrefForm(
                       initialPreference: currentRidePreference,
                       onSubmit: (pref) => onRidePrefSelected(context, pref)),
                   SizedBox(height: BlaSpacings.m),
-
-                  // 2.2 Optionally display a list of past preferences
                   SizedBox(
                     height: 200, // Set a fixed height
                     child: ListView.builder(
