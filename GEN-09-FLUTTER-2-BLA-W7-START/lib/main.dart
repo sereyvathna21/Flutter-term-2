@@ -6,13 +6,11 @@ import 'Data/repository/mock/mock_rides_repository.dart';
 import 'Data/repository/mock/mock_ride_preferences_repository.dart';
 import 'service/locations_service.dart';
 import 'service/rides_service.dart';
-import 'service/ride_prefs_service.dart';
 import 'ui/providers/ride_prefs_provider.dart';
 import 'ui/screens/ride_pref/ride_pref_screen.dart';
 import 'ui/theme/theme.dart';
 
 void main() {
-  RidePrefService.initialize(MockRidePreferencesRepository());
   LocationsService.initialize(MockLocationsRepository());
   RidesService.initialize(MockRidesRepository());
 

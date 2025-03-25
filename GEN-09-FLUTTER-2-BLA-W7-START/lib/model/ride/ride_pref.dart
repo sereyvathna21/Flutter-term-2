@@ -42,4 +42,34 @@ class RidePreference {
         arrival.hashCode ^
         requestedSeats.hashCode;
   }
+
+  // Convert a RidePreference object to a JSON map
+  Map<String, dynamic> toJson() {
+    return {
+      'departure': departure.name,
+      'departureDate': departureDate.toIso8601String(),
+      'arrival': arrival.name,
+      'requestedSeats': requestedSeats,
+      'departureCountry': departure.country.name,
+      'arrivalCountry': arrival.country.name,
+    };
+  }
+
+  // Create a RidePreference object from a JSON map
+  factory RidePreference.fromJson(Map<String, dynamic> json) {
+    return RidePreference(
+      departure: Location(
+        name: json['departure'],
+        country: Country.values
+            .firstWhere((e) => e.name == json['departureCountry']),
+      ),
+      departureDate: DateTime.parse(json['departureDate']),
+      arrival: Location(
+        name: json['arrival'],
+        country:
+            Country.values.firstWhere((e) => e.name == json['arrivalCountry']),
+      ),
+      requestedSeats: json['requestedSeats'],
+    );
+  }
 }
