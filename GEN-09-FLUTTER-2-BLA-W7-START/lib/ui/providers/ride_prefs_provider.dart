@@ -16,16 +16,12 @@ class RidesPreferencesProvider extends ChangeNotifier {
   RidePreference? get currentPreference => _currentPreference;
 
   Future<void> fetchPastPreferences() async {
-    // 1- Handle loading
     pastPreferences = AsyncValue.loading();
     notifyListeners();
     try {
-      // 2 Fetch data
       List<RidePreference> pastPrefs = await repository.getPastPreferences();
-      // 3 Handle success
       pastPreferences = AsyncValue.success(pastPrefs);
     } catch (error) {
-      // 4 Handle error
       pastPreferences = AsyncValue.error(error);
     }
     notifyListeners();
@@ -39,7 +35,6 @@ class RidesPreferencesProvider extends ChangeNotifier {
           !pastPreferences.data!.contains(pref)) {
         _addPreference(pref);
       } else {
-        // Move the existing preference to the end of the list
         pastPreferences.data!.remove(pref);
         _addPreference(pref);
       }
